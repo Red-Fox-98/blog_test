@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Blog;
 use App\Entity\Category;
 use App\Form\DataTransformer\TagTransformer;
+use App\Repository\CategoryRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -21,19 +22,31 @@ class BlogType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('description')
-            ->add('text', TextareaType::class, ['required' => false])
+            ->add('title', TextType::class, [
+                'required' => true,
+                'help' => 'Заполните заголовок текста',
+                'attr' => [
+                    'class' => 'myclass',
+                ]
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => true,
+            ])
+            ->add('text', TextareaType::class, [
+                'required' => true,
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'name',
+                'query_builder' => function ($repository) {
+                    return $repository->createQueryBuilder('p')->orderBy('p.name', 'ASC');
+                },
                 'required' => false,
-                'empty_data' => null,
+                'empty_data' => '',
+                'placeholder' => '-- выбор категории --',
             ])
             ->add('tags', TextType::class, array(
                 'label' => 'Теги',
                 'required' => false,
-                'by_reference' => false,
             ))
         ;
 
@@ -44,7 +57,7 @@ class BlogType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Blog::class,
+            'data_class' => Blog::class
         ]);
     }
 }
