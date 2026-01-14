@@ -19,7 +19,7 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <a href="{{ url('app_blog_index', {'_switch_user': user.email}) }}">Войти под пользователем</a>
+                    <a href="{{ url('app_user_blog_index', {'_switch_user': user.email}) }}">Войти под пользователем</a>
                 </td>
             </tr>
         {% else %}
