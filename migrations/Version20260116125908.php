@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260113104308 extends AbstractMigration
+final class Version20260116125908 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -19,11 +19,10 @@ final class Version20260113104308 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE blog ADD percent SMALLINT DEFAULT NULL');
-    }
+        $this->addSql('ALTER TABLE blog ADD blocked_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');}
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE blog DROP percent');
+        $this->addSql('ALTER TABLE blog DROP blocked_at');
     }
 }
