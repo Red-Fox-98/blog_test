@@ -13,7 +13,7 @@
         {% for blog in blogs %}
             <div class="col-md-4">
                 <h2>{{ blog.title }}</h2>
-                <p>{{ blog.text|length > 50 ? blog.text|slice(0, 50) ~ '...' : blog.text }}</p>
+                <p>{{ blog.text }}</p>
                 <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
             </div>
         {% endfor %}

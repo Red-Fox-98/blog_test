@@ -12,6 +12,6 @@ final class DefaultController extends AbstractController
     #[Route('/', name: 'blog_default')]
     public function index(BlogRepository $blogRepository): Response
     {
-        return $this->render('main/index.html.twig', ['blogs' => $blogRepository->getBlogs()]);
+        return $this->render('default/index.html.twig', ['blogs' => $blogRepository->getBlogs()]);
     }
 }
