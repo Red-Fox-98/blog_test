@@ -19,9 +19,21 @@ class BlogRepository extends ServiceEntityRepository
         parent::__construct($registry, Blog::class);
     }
 
+    /**
+     * @return array<Blog>
+     */
     public function getBlogs():array
     {
-        return $this->createQueryBuilder('b')->setMaxResults(6)->getQuery()->getResult();
+        return $this
+            ->createQueryBuilder('b')
+            ->setMaxResults(6)
+            ->orderBy('b.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getByTitle(string $title): ?Blog {
+        return $this->findOneBy(['title' => $title]);
     }
 
     public function findByBlogFilter(BlogFilter $blogFilter): QueryBuilder
@@ -39,6 +51,8 @@ class BlogRepository extends ServiceEntityRepository
             $blogs->where('b.title LIKE :title')
                 ->setParameter('title', '%'.$blogFilter->getTitle().'%');
         }
+
+        $blogs->orderBy('b.id', 'DESC');
 
         return $blogs;
     }

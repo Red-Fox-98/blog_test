@@ -41,7 +41,8 @@ class AppFixtures extends Fixture
                 $blog = new Blog($user)
                     ->setTitle('Title '.$i)
                     ->setDescription('Description '.$i)
-                    ->setText('Text '.$i);
+                    ->setText('Text '.$i)
+                    ->setStatus('pending');
 
                 $manager->persist($blog);
             }
