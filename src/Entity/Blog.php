@@ -232,4 +232,9 @@ class Blog
 
         return $this;
     }
+
+    public function getUserId(): int
+    {
+        return $this->user->getId();
+    }
 }

@@ -32,7 +32,10 @@ services:
         arguments:
             $defaultContext:
                 circular_reference_handler: '@App\Serializer\CircularReferenceHandler'
-                ignored_attributes: [ 'insertedAt', 'updatedAt' ]
+                ignored_attributes: [ 'createdAt' ]
+                callbacks: {
+                    'updatedAt': '@App\Serializer\UpdatedAtCallback',
+                }
 
 
 knp_paginator:
