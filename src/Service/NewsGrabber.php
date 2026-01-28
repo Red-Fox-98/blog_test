@@ -6,10 +6,13 @@ use App\Repository\BlogRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Monolog\Attribute\WithMonologChannel;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Contracts\Service\Attribute\Required;
 
+#[WithMonologChannel('parser')]
 class NewsGrabber
 {
     private LoggerInterface $logger;
@@ -20,9 +23,11 @@ class NewsGrabber
         private readonly EntityManagerInterface $em,
         private readonly ParameterBagInterface $parameterBag,
         private readonly HttpClient $httpClient,
+//        private readonly LoggerInterface $logger
     ) {
     }
 
+    #[Required]
     public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
@@ -35,7 +40,7 @@ class NewsGrabber
      */
     public function importNews(?int $count = null, bool $dryRun = false): void
     {
-        $this->logger->info('Start getting news');
+        $this->logger->notice('Start getting news - {count}', ['count' => $count]);
 
         $texts = [];
         $crawler = new Crawler($this->httpClient->get('https://www.engadget.com/news/'));
