@@ -30,7 +30,7 @@ class BlogController extends AbstractController
         $blog = new Blog($this->getUser());
         $blog->setTitle('title')->setText('text')->setDescription('description');
 
-        $blog->addComment(new Comment()->setText('text comment'));
+        $blog->addComment((new Comment())->setText('text comment'));
 
         $em->persist($blog);
         $em->flush();
