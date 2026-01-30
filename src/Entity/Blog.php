@@ -52,6 +52,9 @@ class Blog
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private User|null $user = null;
 
+    #[ORM\OneToOne(mappedBy: 'blog', cascade: ['persist', 'remove'])]
+    private BlogMeta|null $blogMeta;
+
     #[Groups(['select_box'])]
     #[ORM\JoinTable(name: 'tags_to_blog')]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'id')]
@@ -255,5 +258,19 @@ class Blog
     public function getUserId(): int
     {
         return $this->user->getId();
+    }
+
+    public function getBlogMeta(): ?BlogMeta
+    {
+        return $this->blogMeta;
+    }
+
+    public function setBlogMeta(?BlogMeta $blogMeta): static
+    {
+        $blogMeta?->setBlog($this);
+
+        $this->blogMeta = $blogMeta;
+
+        return $this;
     }
 }

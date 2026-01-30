@@ -1,5 +1,9 @@
 {% extends 'layout.html.twig' %}
-
+{% block meta_data %}
+    <meta name="description" content="{{ blog.blogMeta.description }}">
+    <meta name="author" content="{{ blog.blogMeta.author }}">
+    <meta name="keywords" content="{{ blog.blogMeta.keywords }}">
+{% endblock %}
 {% block body %}
     <div>
         <h3>{{ blog.title }}</h3>

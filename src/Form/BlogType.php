@@ -39,7 +39,8 @@ class BlogType extends AbstractType
             ])
             ->add('text', TextareaType::class, [
                 'required' => true,
-            ]);
+            ])
+            ->add('blogMeta', BlogMetaType::class);
 
             if($this->security->isGranted('ROLE_ADMIN')){
                 $builder->add('category', EntityType::class, [

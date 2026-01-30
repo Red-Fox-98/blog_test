@@ -19,7 +19,6 @@ final class Version20260120145713 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE blog ADD created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
         $this->addSql('ALTER TABLE blog ADD updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
         $this->addSql('ALTER TABLE blog ADD blocked_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
@@ -37,7 +36,6 @@ final class Version20260120145713 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE blog DROP CONSTRAINT FK_C015514312469DE2');
         $this->addSql('ALTER TABLE blog DROP CONSTRAINT FK_C0155143A76ED395');
         $this->addSql('ALTER TABLE blog DROP created_at');
