@@ -20,18 +20,22 @@ security:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
 
-        login:
-            pattern: ^/api/login
-            stateless: true
-            json_login:
-                check_path: /api/login_check
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#        login:
+#            pattern: ^/api/login
+#            stateless: true
+#            json_login:
+#                check_path: /api/login_check
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#
+#        api:
+#            pattern: ^/api
+#            stateless: true
+#            jwt: ~
 
-        api:
-            pattern: ^/api
-            stateless: true
-            jwt: ~
+        firebase:
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
 
         main:
             lazy: true
@@ -64,6 +68,7 @@ security:
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/user, roles: ROLE_USER }
+         - { path: ^/api/blog, roles: ROLE_USER }
 
 when@test:
     security:
