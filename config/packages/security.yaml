@@ -19,9 +19,31 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+
+#        login:
+#            pattern: ^/api/login
+#            stateless: true
+#            json_login:
+#                check_path: /api/login_check
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#
+#        api:
+#            pattern: ^/api
+#            stateless: true
+#            jwt: ~
+
+        firebase:
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
+
         main:
             lazy: true
             provider: app_user_provider
+
+            json_login:
+                # api_login is a route we will create below
+                check_path: api_login
 
             form_login:
                 # "app_login" is the name of the route created previously
@@ -46,6 +68,7 @@ security:
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/user, roles: ROLE_USER }
+         - { path: ^/api/blog, roles: ROLE_USER }
 
 when@test:
     security:

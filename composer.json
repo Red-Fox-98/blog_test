@@ -1,8 +1,8 @@
 {
-  "name": "todo/list",
+  "name": "blog/test",
   "type": "project",
   "license": "MIT",
-  "description": "Symfony to-do-list",
+  "description": "Symfony blog-test",
   "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
@@ -13,8 +13,10 @@
     "doctrine/doctrine-bundle": "^3.2.2",
     "doctrine/doctrine-migrations-bundle": "^4.0",
     "doctrine/orm": "^3.6.1",
+    "firebase/php-jwt": "^7.0",
     "guzzlehttp/guzzle": "^7.10",
     "knplabs/knp-paginator-bundle": "^6.10",
+    "lexik/jwt-authentication-bundle": "^3.2",
     "phpdocumentor/reflection-docblock": "^5.6.6",
     "phpstan/phpdoc-parser": "^2.3.1",
     "stof/doctrine-extensions-bundle": "^1.15.2",
@@ -109,6 +111,7 @@
   },
   "require-dev": {
     "doctrine/doctrine-fixtures-bundle": "^4.3.1",
+    "helmich/phpunit-json-assert": "^3.5",
     "phpunit/phpunit": "^12.5.6",
     "symfony/browser-kit": "8.0.*",
     "symfony/css-selector": "8.0.*",

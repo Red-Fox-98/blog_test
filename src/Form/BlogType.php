@@ -39,7 +39,8 @@ class BlogType extends AbstractType
             ])
             ->add('text', TextareaType::class, [
                 'required' => true,
-            ]);
+            ])
+            ->add('blogMeta', BlogMetaType::class);
 
             if($this->security->isGranted('ROLE_ADMIN')){
                 $builder->add('category', EntityType::class, [
@@ -82,7 +83,8 @@ class BlogType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Blog::class
+            'data_class' => Blog::class,
+            'csrf_protection' => false,
         ]);
     }
 }

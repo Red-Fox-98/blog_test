@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Dto\BlogDto;
 use App\Repository\BlogRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -19,19 +22,23 @@ class Blog
 {
     use TimestampableEntity;
 
+    #[Groups(['select_box'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['select_box'])]
     #[Assert\NotBlank(message: 'Заголовок обязательный к заполнению')]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Groups(['select_box'])]
     #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Groups(['select_box'])]
     #[Assert\NotBlank]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
@@ -40,10 +47,15 @@ class Blog
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Category|null $category = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private User|null $user = null;
 
+    #[ORM\OneToOne(mappedBy: 'blog', cascade: ['persist', 'remove'])]
+    private BlogMeta|null $blogMeta;
+
+    #[Groups(['select_box'])]
     #[ORM\JoinTable(name: 'tags_to_blog')]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', unique: true)]
@@ -63,6 +75,7 @@ class Blog
     /**
      * @var Collection<int, Comment>
      */
+    #[Ignore]
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'blog', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $comments;
@@ -72,6 +85,18 @@ class Blog
         $this->status = 'pending';
         $this->user = $user;
         $this->comments = new ArrayCollection();
+    }
+
+    public static function createFromDto(UserInterface|User $user, BlogDto $blogDto): Blog
+    {
+        $blog = new self($user);
+
+        $blog
+            ->setTitle($blogDto->title)
+            ->setDescription($blogDto->description)
+            ->setText($blogDto->text);
+
+        return $blog;
     }
 
     #[ORM\PreUpdate]
@@ -226,6 +251,25 @@ class Blog
                 $comment->setBlog(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user->getId();
+    }
+
+    public function getBlogMeta(): ?BlogMeta
+    {
+        return $this->blogMeta;
+    }
+
+    public function setBlogMeta(?BlogMeta $blogMeta): static
+    {
+        $blogMeta?->setBlog($this);
+
+        $this->blogMeta = $blogMeta;
 
         return $this;
     }

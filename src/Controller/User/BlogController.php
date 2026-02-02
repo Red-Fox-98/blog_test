@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/user/blog')]
 final class BlogController extends AbstractController
@@ -34,6 +35,11 @@ final class BlogController extends AbstractController
             $request->query->getInt('page', 1),
             10
         );
+
+//        return $this->json($pagination, context: [
+//            AbstractNormalizer::IGNORED_ATTRIBUTES => ['category'],
+//            AbstractNormalizer::GROUPS => ['select_box']
+//        ]);
 
         return $this->render('blog/index.html.twig', [
             'pagination' => $pagination,

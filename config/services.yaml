@@ -8,6 +8,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     autoblog: 2
+    app.jwt.privateKey: '%env(file:resolve:JWT_AUTH_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,6 +26,22 @@ services:
 
     App\Service\ContentWatchApi:
         $key: '%env(CONTENT_WATCH_API_KEY)%'
+
+    app.normalizer.object_normalizer:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        tags: [ 'serializer.normalizer' ]
+        arguments:
+            $propertyInfoExtractor: null
+            $defaultContext:
+                circular_reference_handler: '@App\Serializer\CircularReferenceHandler'
+                ignored_attributes: [ 'createdAt' ]
+                callbacks: {
+                    'updatedAt': '@App\Serializer\UpdatedAtCallback',
+                }
+    App\Security\ApiKeyAuthenticator:
+        arguments:
+            $publicKey: '%env(file:resolve:JWT_AUTH_PUBLIC_KEY)%'
+
 
 knp_paginator:
     convert_exception: false            # throw a 404 exception when an invalid page is requested
