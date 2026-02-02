@@ -8,6 +8,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     autoblog: 2
+    app.jwt.privateKey: '%env(file:resolve:JWT_AUTH_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -37,6 +38,9 @@ services:
                 callbacks: {
                     'updatedAt': '@App\Serializer\UpdatedAtCallback',
                 }
+    App\Security\ApiKeyAuthenticator:
+        arguments:
+            $publicKey: '%env(file:resolve:JWT_AUTH_PUBLIC_KEY)%'
 
 
 knp_paginator:
